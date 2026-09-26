@@ -18,7 +18,7 @@ const Gameboard = {
 
   resetTheGame() {
     resetButton.addEventListener("click", () => {
-      player = "X"
+      player = "X";
       firstPlayer.value = "";
       secondPlayer.value = "";
       turnIndicator.textContent = "";
@@ -37,7 +37,6 @@ const Gameboard = {
     startButton.addEventListener("click", () => {
       if (firstPlayer.value !== "" && secondPlayer.value !== "") {
         gameStarted = true;
-        displayController.clickTheBoard();
         turnIndicator.textContent = `${firstPlayer.value}'s turn!`;
         startButton.disabled = true;
       }
@@ -63,10 +62,10 @@ const Gameboard = {
   },
 
   checkTheBoard() {
-    let lenghtOfRow = Gameboard.board.length / 3;
-    let firstRow = Gameboard.board.slice(0, lenghtOfRow);
-    let secondRow = Gameboard.board.slice(lenghtOfRow, lenghtOfRow * 2);
-    let thirdRow = Gameboard.board.slice(lenghtOfRow * 2, lenghtOfRow * 3);
+    let lengthOfRow = Gameboard.board.length / 3;
+    let firstRow = Gameboard.board.slice(0, lengthOfRow);
+    let secondRow = Gameboard.board.slice(lengthOfRow, lengthOfRow * 2);
+    let thirdRow = Gameboard.board.slice(lengthOfRow * 2, lengthOfRow * 3);
 
     if (
       (firstRow[0] === "X" && firstRow[1] === "X" && firstRow[2] === "X") ||
@@ -172,13 +171,17 @@ const Gameboard = {
 
 const displayController = {
   clickTheBoard() {
+    function handleSquareClick(index) {
+      if (!gameStarted) return;
+      
+      Gameboard.addMarkToBoard(index);
+      displayController.displayGameboard();
+      Gameboard.checkTheBoard();
+    }
+
     squares.forEach((square, index) => {
       square.addEventListener("click", () => {
-        if (!gameStarted) return;
-
-        Gameboard.addMarkToBoard(index);
-        this.displayGameboard();
-        Gameboard.checkTheBoard();
+        handleSquareClick(index);
       });
     });
   },
@@ -191,3 +194,4 @@ const displayController = {
 };
 
 Gameboard.playTheGame();
+displayController.clickTheBoard();
